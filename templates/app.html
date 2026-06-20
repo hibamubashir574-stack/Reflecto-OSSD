@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 <style>
 .pri{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.35rem;flex-shrink:0;vertical-align:middle}
-.pri-high{background:var(--danger)}.pri-medium{background:var(--warning)}.pri-low{background:var(--success)}
+.pri-high{background:var(--danger)} .pri-medium{background:var(--warning)} .pri-low{background:var(--success)}
 .ncat-filter-row{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1rem}
 .ncat-chip{padding:.22rem .75rem;border-radius:20px;font-size:.75rem;background:var(--surface2);border:1.5px solid var(--border);color:var(--muted);cursor:pointer;text-decoration:none;transition:all .15s}
 .ncat-chip:hover,.ncat-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
@@ -15,18 +15,33 @@
 .pin-btn:hover{color:var(--accent)}
 .t-cb{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);background:transparent;cursor:pointer;flex-shrink:0;margin-top:.15rem;display:flex;align-items:center;justify-content:center;font-size:.65rem;color:#fff;transition:background .15s,border-color .15s}
 .t-cb:hover,.t-cb.done-btn{background:var(--accent);border-color:var(--accent)}
+.about-hero{font-size:.9rem;color:var(--muted);line-height:1.7;margin-bottom:.25rem}
+.about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.9rem;margin-top:1.25rem}
+.about-mini{background:var(--surface2);border:1.5px solid var(--border);border-radius:14px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .2s,transform .15s}
+.about-mini:hover{border-color:var(--accent);transform:translateY(-2px)}
+.about-mini-icon{width:38px;height:38px;border-radius:10px;background:var(--accent-bg);border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.05rem}
+.about-mini h4{font-size:.92rem;color:var(--text)}
+.about-mini p{font-size:.78rem;color:var(--muted);line-height:1.55}
+.faq-item{border:1.5px solid var(--border);border-radius:12px;margin-bottom:.55rem;overflow:hidden;background:var(--surface2);max-width:760px}
+.faq-item summary{cursor:pointer;list-style:none;padding:.75rem 1rem;font-size:.85rem;font-weight:500;color:var(--text);display:flex;align-items:center;justify-content:space-between;gap:.6rem}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';font-size:1.1rem;color:var(--muted);transition:transform .2s;flex-shrink:0}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item .faq-body{padding:0 1rem 1rem;font-size:.8rem;color:var(--muted);line-height:1.6}
+.about-footer-note{margin-top:1.5rem;font-size:.78rem;color:var(--muted)}
+.inline-form{display:inline}
+.icon-btn{background:none;border:none;color:var(--muted);cursor:pointer}
+.full-field{width:100%;margin-bottom:.6rem}
+.mt-1{margin-top:1rem}
+.mt-15{margin-top:1.5rem}
 </style>
 </head>
 <body>
-
 {% if ok and ok in toasts %}
 <div class="toast-static {{ toasts[ok][1] }}">{{ toasts[ok][0] }}</div>
 {% endif %}
-
 <input type="checkbox" id="sidebarToggle" style="display:none"/>
-
 <div class="app-root" id="app">
-  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="brand">
       <h1>Reflecto<span>.</span> <span>&#x1F43E;</span></h1>
@@ -57,8 +72,6 @@
       <a href="/export_pdf" class="btn-reset" style="text-decoration:none;display:block;margin-top:.4rem;text-align:center">&#x1F4C4; Export PDF</a>
     </div>
   </aside>
-
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <div class="row" style="gap:.4rem">
@@ -70,8 +83,6 @@
         <span class="date-pill">{{ today }}</span>
       </div>
     </div>
-
-    {# ──────────────────────────────────────── MOOD PAGE #}
     {% if page == 'mood' %}
     <div class="page active" id="page-mood">
       <h3 style="margin-bottom:.15rem">Hello, {{ user }} &#x1F44B;</h3>
@@ -99,23 +110,23 @@
         </form>
       </div>
       {% if data.moods %}
-      <div class="card" style="margin-top:1rem">
+      <div class="card mt-1">
         <div style="font-size:.88rem;font-weight:500;margin-bottom:.75rem">Recent Moods</div>
         {% for m in data.moods[:7] %}
         <div class="row" style="justify-content:space-between;padding:.4rem 0;border-bottom:1px solid var(--border)">
           <span>{{ m.mood }}</span>
-          <span style="font-size:.75rem;color:var(--muted)">{{ m.date }} {{ m.time }}</span>
-          <form method="POST" action="/mood_del" style="display:inline">
-            <input type="hidden" name="idx" value="{{ loop.index0 }}"/>
-            <button type="submit" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem">&#x2715;</button>
-          </form>
+          <div class="row" style="gap:.6rem;margin-left:auto">
+            <span style="font-size:.75rem;color:var(--muted)">{{ m.date }} {{ m.time }}</span>
+            <form method="POST" action="/mood_del" class="inline-form">
+              <input type="hidden" name="idx" value="{{ loop.index0 }}"/>
+              <button type="submit" class="icon-btn">&#x2715;</button>
+            </form>
+          </div>
         </div>
         {% endfor %}
       </div>
       {% endif %}
     </div>
-
-    {# ──────────────────────────────────────── JOURNAL PAGE #}
     {% elif page == 'journal' %}
     <div class="page active" id="page-journal">
       <div class="row" style="gap:.6rem;margin-bottom:1rem">
@@ -127,7 +138,6 @@
           <a class="j-item {% if cur_entry and cur_entry.id==e.id %}active{% endif %}" href="/app?page=journal&jid={{ e.id }}">
             <div class="j-title">{{ e.title }}</div>
             <div class="j-meta">{{ e.date }}{% if e.get('edited') %} &middot; edited{% endif %} &middot; {{ e.body|length }} chars</div>
-            {% if e.tags %}<div>{% for t in e.tags %}<span class="tag-pill">{{ t }}</span>{% endfor %}</div>{% endif %}
           </a>
           {% else %}
           <div style="color:var(--muted);font-size:.85rem;padding:.75rem">No journal entries yet.</div>
@@ -139,10 +149,9 @@
             <input type="hidden" name="id" value="{{ cur_entry.id }}"/>
             <input class="j-title-input" type="text" name="title" value="{{ cur_entry.title }}" placeholder="Title"/>
             <textarea class="j-body" name="body" rows="14" placeholder="Write…">{{ cur_entry.body }}</textarea>
-            <input type="text" name="tags" value="{{ cur_entry.tags|join(', ') }}" placeholder="Tags (comma-separated)" style="width:100%;margin-bottom:.6rem"/>
             <div class="row" style="gap:.5rem">
               <button class="btn btn-a" type="submit">Save</button>
-              <form method="POST" action="/journal_del" style="display:inline" onsubmit="return confirm('Delete this entry?')">
+              <form method="POST" action="/journal_del" class="inline-form" onsubmit="return confirm('Delete this entry?')">
                 <input type="hidden" name="id" value="{{ cur_entry.id }}"/>
                 <button class="btn" type="submit">&#x1F5D1; Delete</button>
               </form>
@@ -153,15 +162,12 @@
             <input type="hidden" name="id" value=""/>
             <input class="j-title-input" type="text" name="title" placeholder="Entry title"/>
             <textarea class="j-body" name="body" rows="14" placeholder="Start writing…"></textarea>
-            <input type="text" name="tags" placeholder="Tags (comma-separated)" style="width:100%;margin-bottom:.6rem"/>
             <button class="btn btn-a" type="submit">Save Entry</button>
           </form>
           {% endif %}
         </div>
       </div>
     </div>
-
-    {# ──────────────────────────────────────── NOTES PAGE #}
     {% elif page == 'notes' %}
     <div class="page active" id="page-notes">
       <div class="row" style="gap:.6rem;margin-bottom:1rem">
@@ -185,8 +191,8 @@
         <div class="note-card {% if n.get('pinned') %}pinned{% endif %}">
           <div class="note-card-head">
             <span class="note-cat-chip">{{ n.get('cat','General') }}</span>
-            <form method="POST" action="/note_pin" style="display:inline">
-              <input type="hidden" name="id" value="{{ n.id }}"/><button class="pin-btn" type="submit" title="Pin">{{ '&#x1F4CC;' if n.get('pinned') else '&#x1F4CD;' }}</button>
+            <form method="POST" action="/note_pin" class="inline-form">
+              <input type="hidden" name="id" value="{{ n.id }}"/><button class="pin-btn" type="submit" title="Pin">{{ ('&#x1F4CC;' if n.get('pinned') else '&#x25CB;')|safe }}</button>
             </form>
           </div>
           <a class="note-title" href="/app?page=notes&nid={{ n.id }}">{{ n.title }}</a>
@@ -195,7 +201,7 @@
           <div class="row" style="gap:.4rem;margin-top:.5rem">
             <a class="btn btn-s" href="/app?page=notes&nid={{ n.id }}">Edit</a>
             <a class="btn btn-s" href="/note_csv/{{ n.id }}">&#x2B07; CSV</a>
-            <form method="POST" action="/note_del" onsubmit="return confirm('Delete?')" style="display:inline">
+            <form method="POST" action="/note_del" onsubmit="return confirm('Delete?')" class="inline-form">
               <input type="hidden" name="id" value="{{ n.id }}"/><button class="btn btn-s" type="submit">&#x1F5D1;</button>
             </form>
           </div>
@@ -204,38 +210,22 @@
         <div style="color:var(--muted);font-size:.85rem">No notes found.</div>
         {% endfor %}
       </div>
-      {# Note editor panel if nid in URL #}
+      {# Note editor: same form works for editing an existing note or creating a new one #}
       {% set nid = request.args.get('nid','') %}
-      {% if nid %}
-        {% set cur_note = data.notes | selectattr('id','equalto',nid) | first | default(none) %}
-        {% if cur_note %}
-        <div class="card" style="margin-top:1.5rem">
-          <form method="POST" action="/note_save">
-            <input type="hidden" name="id" value="{{ cur_note.id }}"/>
-            <input type="text" name="title" value="{{ cur_note.title }}" placeholder="Note title" style="width:100%;margin-bottom:.6rem"/>
-            <input type="text" name="cat" value="{{ cur_note.get('cat','General') }}" placeholder="Category" style="width:100%;margin-bottom:.6rem"/>
-            <textarea name="body" rows="12" placeholder="Note content…">{{ cur_note.body }}</textarea>
-            <div class="row" style="gap:.5rem;margin-top:.6rem">
-              <button class="btn btn-a" type="submit">Save</button>
-            </div>
-          </form>
-        </div>
-        {% endif %}
-      {% else %}
-      <div class="card" style="margin-top:1.5rem">
-        <div style="font-weight:500;margin-bottom:.75rem">New Note</div>
+      {% set cur_note = (data.notes | selectattr('id','equalto',nid) | first | default(none)) if nid else none %}
+      {% if not nid or cur_note %}
+      <div class="card mt-15">
+        <div style="font-weight:500;margin-bottom:.75rem">{{ 'Edit Note' if cur_note else 'New Note' }}</div>
         <form method="POST" action="/note_save">
-          <input type="hidden" name="id" value=""/>
-          <input type="text" name="title" placeholder="Note title" style="width:100%;margin-bottom:.6rem"/>
-          <input type="text" name="cat" placeholder="Category (e.g. Math, Biology)" style="width:100%;margin-bottom:.6rem"/>
-          <textarea name="body" rows="8" placeholder="Note content…"></textarea>
+          <input type="hidden" name="id" value="{{ cur_note.id if cur_note else '' }}"/>
+          <input type="text" name="title" value="{{ cur_note.title if cur_note else '' }}" placeholder="Note title" class="full-field"/>
+          <input type="text" name="cat" value="{{ cur_note.get('cat','General') if cur_note else '' }}" placeholder="Category (e.g. Math, Biology)" class="full-field"/>
+          <textarea name="body" rows="{{ 12 if cur_note else 8 }}" placeholder="Note content…">{{ cur_note.body if cur_note else '' }}</textarea>
           <button class="btn btn-a" type="submit" style="margin-top:.6rem">Save Note</button>
         </form>
       </div>
       {% endif %}
     </div>
-
-    {# ──────────────────────────────────────── TASKS PAGE #}
     {% elif page == 'tasks' %}
     <div class="page active" id="page-tasks">
       <div class="card" style="margin-bottom:1rem">
@@ -257,7 +247,7 @@
       <div class="t-list">
         {% for t in pending %}
         <div class="t-item {% if is_overdue(t.get('due','')) %}overdue{% endif %}">
-          <form method="POST" action="/task_toggle" style="display:inline">
+          <form method="POST" action="/task_toggle" class="inline-form">
             <input type="hidden" name="id" value="{{ t.id }}"/>
             <button class="t-cb" type="submit" title="Mark done"></button>
           </form>
@@ -265,14 +255,14 @@
             <span class="pri pri-{{ t.get('priority','medium') }}"></span>{{ t.title }}
             {% if t.get('due') %}<span class="task-due {% if is_overdue(t.due) %}late{% endif %}"> &middot; {{ t.due }}</span>{% endif %}
           </div>
-          <form method="POST" action="/task_del" onsubmit="return confirm('Delete task?')" style="display:inline">
-            <input type="hidden" name="id" value="{{ t.id }}"/><button type="submit" style="background:none;border:none;color:var(--muted);cursor:pointer">&#x2715;</button>
+          <form method="POST" action="/task_del" onsubmit="return confirm('Delete task?')" class="inline-form">
+            <input type="hidden" name="id" value="{{ t.id }}"/><button type="submit" class="icon-btn">&#x2715;</button>
           </form>
         </div>
         {% endfor %}
       </div>
       {% if done %}
-      <div style="margin-top:1rem">
+      <div class="mt-1">
         <div class="row" style="justify-content:space-between;margin-bottom:.5rem">
           <span style="font-size:.8rem;color:var(--muted)">Completed ({{ done|length }})</span>
           <form method="POST" action="/task_clear">
@@ -281,23 +271,21 @@
         </div>
         {% for t in done %}
         <div class="t-item done">
-          <form method="POST" action="/task_toggle" style="display:inline">
+          <form method="POST" action="/task_toggle" class="inline-form">
             <input type="hidden" name="id" value="{{ t.id }}"/>
             <button class="t-cb done-btn" type="submit">&#x2713;</button>
           </form>
           <div style="flex:1;text-decoration:line-through;color:var(--muted)">{{ t.title }}
             {% if t.get('done_late') %}<span style="color:var(--danger);font-size:.7rem"> (late)</span>{% endif %}
           </div>
-          <form method="POST" action="/task_del" style="display:inline">
-            <input type="hidden" name="id" value="{{ t.id }}"/><button type="submit" style="background:none;border:none;color:var(--muted);cursor:pointer">&#x2715;</button>
+          <form method="POST" action="/task_del" class="inline-form">
+            <input type="hidden" name="id" value="{{ t.id }}"/><button type="submit" class="icon-btn">&#x2715;</button>
           </form>
         </div>
         {% endfor %}
       </div>
       {% endif %}
     </div>
-
-    {# ──────────────────────────────────────── TIMER PAGE #}
     {% elif page == 'timer' %}
     <div class="page active timer-page" id="page-timer">
       <div class="timer-tabs">
@@ -346,8 +334,6 @@
         <div id="alarmList"></div>
       </div>
     </div>
-
-    {# ──────────────────────────────────────── CONTACT PAGE #}
     {% elif page == 'contact' %}
     <div class="page active" id="page-contact">
       <div class="card" style="max-width:600px">
@@ -362,7 +348,7 @@
             <input name="from_name" type="text" placeholder="Your name" required style="width:100%"/>
             <input name="reply_to" type="email" placeholder="Your email" required style="width:100%"/>
           </div>
-          <input name="subject" type="text" placeholder="Subject" required style="width:100%;margin-bottom:.6rem"/>
+          <input name="subject" type="text" placeholder="Subject" required class="full-field"/>
           <textarea name="message" placeholder="Your message… (purrr &#x1F63A;)" required rows="5" style="width:100%;margin-bottom:.75rem"></textarea>
           <button class="btn btn-a" type="submit" style="width:100%;padding:.65rem">Send Message &#x1F43E; &rarr;</button>
           <p id="contact-status" style="margin-top:.6rem;font-size:.85rem;text-align:center"></p>
@@ -392,94 +378,225 @@
           });
       });
     </script>
-
-    {# ──────────────────────────────────────── ABOUT PAGE #}
     {% elif page == 'about' %}
     <div class="page active" id="page-about">
-      <div class="card" style="max-width:640px">
-        <h3 style="margin-bottom:.75rem">&#x1F4A1; About Reflecto</h3>
-        <p style="color:var(--muted);font-size:.88rem;line-height:1.7">
-          Reflecto is a private, local-first personal productivity app.<br/>
-          Built with <strong>Python + Flask</strong>, data stored as local JSON files.<br/><br/>
-          Features: Mood tracking &middot; Journal &middot; Study Notes &middot; Tasks &middot; Timer &amp; Alarm<br/>
-          Export: CSV per note &middot; Full PDF export<br/><br/>
-          <strong>No cloud. No tracking. Your data stays on your machine.</strong>
-        </p>
-        <div style="margin-top:1rem;font-size:.78rem;color:var(--muted)">v2.0 &mdash; Python/Flask Port</div>
+      <h3 style="margin-bottom:.25rem">About Reflecto</h3>
+      <p class="about-hero" style="max-width:760px">
+        Your private, server-side productivity companion. Built with <strong>Python + Flask</strong>, with everything saved as local JSON files on your own machine.
+      </p>
+      <div class="about-grid">
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x1F324;</div>
+          <h4>Mood Tracking</h4>
+          <p>Log how you're feeling once a day with a single tap. Reflecto quietly keeps your streak and a recent history so you can look back and notice patterns over time.</p>
+        </div>
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x270D;</div>
+          <h4>Journal</h4>
+          <p>A distraction-free writing space for your thoughts. Create, edit, and revisit entries whenever you need to think out loud or simply put the day into words.</p>
+        </div>
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x1F4DA;</div>
+          <h4>Study Notes</h4>
+          <p>Organize notes by category, pin the ones you reach for often, and search through everything instantly. Export any note as CSV whenever you need a copy.</p>
+        </div>
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x2705;</div>
+          <h4>Tasks</h4>
+          <p>Keep a simple to-do list with priority flags and due dates. Reflecto flags anything overdue automatically and tracks your overall completion progress.</p>
+        </div>
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x23F1;</div>
+          <h4>Timer &amp; Alarm</h4>
+          <p>A built-in countdown timer, stopwatch with laps, and alarms — handy for Pomodoro-style focus sessions or just keeping time on a task.</p>
+        </div>
+        <div class="about-mini">
+          <div class="about-mini-icon">&#x1F3A8;</div>
+          <h4>Themes</h4>
+          <p>Pick from a dozen light and dark palettes — from calm blues and greens to warm browns and purples — and Reflecto remembers your choice next time.</p>
+        </div>
       </div>
+      <h3 style="margin:2rem 0 .9rem">FAQ</h3>
+      <details class="faq-item">
+        <summary>Where is my data stored?</summary>
+        <div class="faq-body">Everything you write — moods, journal entries, notes, and tasks — is saved as a local JSON file on the machine running Reflecto. Nothing is sent to a server or stored in the cloud.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Is my data shared or tracked in any way?</summary>
+        <div class="faq-body">No. Reflecto has no analytics, ads, or tracking of any kind. Your entries stay between you and your own files.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can I export my notes or data?</summary>
+        <div class="faq-body">Yes. You can export any individual study note as a CSV file, or export your full account as a PDF from the sidebar.</div>
+      </details>
+      <details class="faq-item">
+        <summary>What happens if I reset my data?</summary>
+        <div class="faq-body">Resetting clears your journal, notes, tasks, and mood history for a fresh start. Your theme preference is kept. This action can't be undone, so Reflecto asks you to confirm first.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Can more than one person use Reflecto?</summary>
+        <div class="faq-body">Yes. Each person signs in with their own name and password, and gets their own private space and data file — switch users any time from the sidebar.</div>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need an internet connection to use it?</summary>
+        <div class="faq-body">No, Reflecto runs entirely on your machine. An internet connection is only used for the optional contact form.</div>
+      </details>
+      <div class="about-footer-note">v2.0 &mdash; Python/Flask Port &middot; No cloud. No tracking. Your data stays on your machine.</div>
     </div>
     {% endif %}
-
   </div>{# /main #}
 </div>{# /app-root #}
-
 <script>
-// Stamp client time/date into mood form
-document.addEventListener('DOMContentLoaded',function(){
-  var mf=document.getElementById('moodForm');
-  if(mf){
-    mf.addEventListener('submit',function(){
-      var now=new Date();
-      var h=now.getHours(),m=now.getMinutes(),ap=h>=12?'PM':'AM';
-      h=h%12||12;
-      document.getElementById('clientTime').value=h+':'+(m<10?'0':'')+m+' '+ap;
-      document.getElementById('clientDate').value=(now.getMonth()+1)+'/'+(now.getDate())+'/'+now.getFullYear();
-    });
-  }
+const pad = n => String(n).padStart(2, '0');
+const formatCountdown = totalSeconds => {
+  const h = Math.floor(totalSeconds / 3600);
+  const m = Math.floor((totalSeconds % 3600) / 60);
+  const s = totalSeconds % 60;
+  return `${h}:${pad(m)}:${pad(s)}`;
+};
+const formatStopwatch = ms => {
+  const m = Math.floor(ms / 60000);
+  const s = Math.floor((ms % 60000) / 1000);
+  const tenths = Math.floor((ms % 1000) / 100);
+  return `${pad(m)}:${pad(s)}.${tenths}`;
+};
+document.addEventListener('DOMContentLoaded', () => {
+  const moodForm = document.getElementById('moodForm');
+  if (!moodForm) return;
+  moodForm.addEventListener('submit', () => {
+    const now = new Date();
+    document.getElementById('clientTime').value =
+      now.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    document.getElementById('clientDate').value =
+      `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
+  });
 });
-
-// Timer tab switching
-function switchTab(name,btn){
-  document.querySelectorAll('.timer-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.timer-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
+function switchTab(name, btn) {
+  document.querySelectorAll('.timer-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.timer-tab').forEach(b => b.classList.remove('active'));
+  document.getElementById(`panel-${name}`).classList.add('active');
   btn.classList.add('active');
 }
-
-// ── Countdown ──
-var cdInt=null,cdTotal=0,cdLeft=0,cdRunning=false;
-function cdPreset(s){cdLeft=cdTotal=s;document.getElementById('cdH').value=Math.floor(s/3600)||'';document.getElementById('cdM').value=Math.floor((s%3600)/60)||'';document.getElementById('cdS').value=s%60||'';cdDraw();}
-function cdStart(){
-  if(!cdRunning){
-    var h=parseInt(document.getElementById('cdH').value)||0,m=parseInt(document.getElementById('cdM').value)||0,s=parseInt(document.getElementById('cdS').value)||0;
-    if(!cdLeft)cdLeft=cdTotal=h*3600+m*60+s;
-    if(!cdLeft)return;
-    cdRunning=true;
-    cdInt=setInterval(function(){cdLeft--;cdDraw();if(cdLeft<=0){clearInterval(cdInt);cdRunning=false;alert('Timer done!');cdLeft=0;}},1000);
+const countdown = { interval: null, total: 0, left: 0, running: false };
+function cdPreset(seconds) {
+  countdown.left = countdown.total = seconds;
+  document.getElementById('cdH').value = Math.floor(seconds / 3600) || '';
+  document.getElementById('cdM').value = Math.floor((seconds % 3600) / 60) || '';
+  document.getElementById('cdS').value = seconds % 60 || '';
+  cdDraw();
+}
+function cdStart() {
+  if (countdown.running) return;
+  if (!countdown.left) {
+    const h = parseInt(document.getElementById('cdH').value) || 0;
+    const m = parseInt(document.getElementById('cdM').value) || 0;
+    const s = parseInt(document.getElementById('cdS').value) || 0;
+    countdown.left = countdown.total = h * 3600 + m * 60 + s;
   }
+  if (!countdown.left) return;
+  countdown.running = true;
+  countdown.interval = setInterval(() => {
+    countdown.left--;
+    cdDraw();
+    if (countdown.left <= 0) {
+      cdPause();
+      countdown.left = 0;
+      alert('Timer done!');
+    }
+  }, 1000);
 }
-function cdPause(){clearInterval(cdInt);cdRunning=false;}
-function cdReset(){clearInterval(cdInt);cdRunning=false;cdLeft=cdTotal;cdDraw();}
-function cdDraw(){
-  var h=Math.floor(cdLeft/3600),m=Math.floor((cdLeft%3600)/60),s=cdLeft%60;
-  document.getElementById('cdDisplay').textContent=h+':'+(m<10?'0':'')+m+':'+(s<10?'0':'')+s;
-  document.getElementById('cdProgress').style.width=(cdTotal?((cdTotal-cdLeft)/cdTotal*100):0)+'%';
+function cdPause() {
+  clearInterval(countdown.interval);
+  countdown.running = false;
 }
-
-// ── Stopwatch ──
-var swInt=null,swMs=0,swRunning=false,swLaps=[];
-function swStart(){if(!swRunning){swRunning=true;var last=Date.now()-swMs;swInt=setInterval(function(){swMs=Date.now()-last;swDraw();},100);}}
-function swPause(){clearInterval(swInt);swRunning=false;}
-function swLap(){if(swRunning){swLaps.push(swMs);var li=document.createElement('li');li.textContent='Lap '+swLaps.length+': '+swFmt(swMs);document.getElementById('lapList').prepend(li);}}
-function swReset(){clearInterval(swInt);swRunning=false;swMs=0;swLaps=[];document.getElementById('swDisplay').textContent='00:00.0';document.getElementById('lapList').innerHTML='';}
-function swDraw(){var m=Math.floor(swMs/60000),s=Math.floor((swMs%60000)/1000),t=Math.floor((swMs%1000)/100);document.getElementById('swDisplay').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s+'.'+t;}
-function swFmt(ms){var m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),t=Math.floor((ms%1000)/100);return(m<10?'0':'')+m+':'+(s<10?'0':'')+s+'.'+t;}
-
-// ── Alarm ──
-var alarms=[];
-setInterval(function(){
-  var now=new Date(),hh=('0'+now.getHours()).slice(-2),mm=('0'+now.getMinutes()).slice(-2),cur=hh+':'+mm;
-  alarms.forEach(function(a){if(!a.fired&&a.time===cur){a.fired=true;alert('Alarm: '+(a.label||a.time));renderAlarms();}});
-},10000);
-function addAlarm(){
-  var t=document.getElementById('alarmTime').value,l=document.getElementById('alarmLabel').value;
-  if(!t)return;alarms.push({time:t,label:l,fired:false});renderAlarms();
-  document.getElementById('alarmTime').value='';document.getElementById('alarmLabel').value='';
+function cdReset() {
+  cdPause();
+  countdown.left = countdown.total;
+  cdDraw();
 }
-function removeAlarm(i){alarms.splice(i,1);renderAlarms();}
-function renderAlarms(){
-  var el=document.getElementById('alarmList');
-  el.innerHTML=alarms.map(function(a,i){return'<div style="display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid var(--border)">'+'<span style="font-size:1.1rem">&#x1F514;</span><b>'+a.time+'</b> '+(a.label?'<span style="color:var(--muted)">'+a.label+'</span>':'')+' '+(a.fired?'<span style="color:var(--success)">(fired)</span>':'')+'<button onclick="removeAlarm('+i+')" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted)">&#x2715;</button></div>';}).join('');
+function cdDraw() {
+  document.getElementById('cdDisplay').textContent = formatCountdown(countdown.left);
+  const pct = countdown.total ? (countdown.total - countdown.left) / countdown.total * 100 : 0;
+  document.getElementById('cdProgress').style.width = `${pct}%`;
+}
+const stopwatch = { interval: null, ms: 0, running: false, laps: [] };
+ 
+function swStart() {
+  if (stopwatch.running) return;
+  stopwatch.running = true;
+  const startedAt = Date.now() - stopwatch.ms;
+  stopwatch.interval = setInterval(() => {
+    stopwatch.ms = Date.now() - startedAt;
+    document.getElementById('swDisplay').textContent = formatStopwatch(stopwatch.ms);
+  }, 100);
+}
+function swPause() {
+  clearInterval(stopwatch.interval);
+  stopwatch.running = false;
+}
+function swLap() {
+  if (!stopwatch.running) return;
+  stopwatch.laps.push(stopwatch.ms);
+  const li = document.createElement('li');
+  li.textContent = `Lap ${stopwatch.laps.length}: ${formatStopwatch(stopwatch.ms)}`;
+  document.getElementById('lapList').prepend(li);
+}
+function swReset() {
+  swPause();
+  stopwatch.ms = 0;
+  stopwatch.laps = [];
+  document.getElementById('swDisplay').textContent = '00:00.0';
+  document.getElementById('lapList').innerHTML = '';
+}
+const alarms = [];
+setInterval(() => {
+  const now = new Date();
+  const current = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  alarms.forEach(a => {
+    if (!a.fired && a.time === current) {
+      a.fired = true;
+      alert(`Alarm: ${a.label || a.time}`);
+      renderAlarms();
+    }
+  });
+}, 10000);
+function addAlarm() {
+  const time = document.getElementById('alarmTime').value;
+  const label = document.getElementById('alarmLabel').value;
+  if (!time) return;
+  alarms.push({ time, label, fired: false });
+  renderAlarms();
+  document.getElementById('alarmTime').value = '';
+  document.getElementById('alarmLabel').value = '';
+}
+function removeAlarm(i) {
+  alarms.splice(i, 1);
+  renderAlarms();
+}
+function renderAlarms() {
+  const list = document.getElementById('alarmList');
+  list.innerHTML = '';
+  alarms.forEach((alarm, i) => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid var(--border)';
+    row.innerHTML = `<span style="font-size:1.1rem">🔔</span><b>${alarm.time}</b>`;
+    if (alarm.label) row.appendChild(makeSpan(alarm.label, 'var(--muted)'));
+    if (alarm.fired) row.appendChild(makeSpan('(fired)', 'var(--success)'));
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'icon-btn';
+    removeBtn.style.marginLeft = 'auto';
+    removeBtn.textContent = '✕';
+    removeBtn.onclick = () => removeAlarm(i);
+    row.appendChild(removeBtn);
+ 
+    list.appendChild(row);
+  });
+}
+function makeSpan(text, color) {
+  const span = document.createElement('span');
+  span.style.color = color;
+  span.textContent = text;
+  return span;
 }
 </script>
 </body>
