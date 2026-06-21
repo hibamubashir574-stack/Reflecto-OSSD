@@ -54,10 +54,10 @@
       <div class="brand-tagline">Journal &middot; Study &middot; Focus</div></div>
     <ul class="feature-list">
       <li class="feature-item"><div class="feat-icon">&#x1F324;</div><div class="feat-text"><h4>Mood Tracking</h4><p>Log daily moods and track your streak.</p></div></li>
-      <li class="feature-item"><div class="feat-icon">&#x270D;</div><div class="feat-text"><h4>Private Journal</h4><p>Distraction-free writing with tags.</p></div></li>
+      <li class="feature-item"><div class="feat-icon">&#x270D;</div><div class="feat-text"><h4>Private Journal</h4><p>Distraction-free writing.</p></div></li>
       <li class="feature-item"><div class="feat-icon">&#x1F4DA;</div><div class="feat-text"><h4>Study Notes</h4><p>Full editor with CSV &amp; PDF export.</p></div></li>
       <li class="feature-item"><div class="feat-icon">&#x2705;</div><div class="feat-text"><h4>Task Manager</h4><p>Priority flags, due dates, overdue detection.</p></div></li>
-      <li class="feature-item"><div class="feat-icon">&#x23F1;</div><div class="feat-text"><h4>Timer &amp; Alarm</h4><p>Pomodoro, countdown, stopwatch, alarm.</p></div></li>
+      <li class="feature-item"><div class="feat-icon">&#x23F1;</div><div class="feat-text"><h4>Timer &amp; Alarm</h4><p>Countdown, stopwatch, alarm.</p></div></li>
     </ul>
     <div class="left-footer"><span>&#x1F512;</span><span>Private &middot; Local JSON &middot; No tracking</span></div>  </div>
   <div class="right-panel">
@@ -81,7 +81,7 @@
           <input type="hidden" name="name" value="{{ u.name }}"/>
           <button class="btn-del-user" type="submit">&#x1F5D1;</button>
         </form> </div>  {% endfor %}
-      <div class="divider">— or enter new name —</div> {% endif %}
+      <div class="divider"> or enter new name</div> {% endif %}
       <form method="POST" action="/login">
         <div class="form-group">
           <label>Username</label>
