@@ -1,4 +1,4 @@
-import os, csv, io, re, hashlib, time, random
+import os, csv, io, re, hashlib, time, random, threading
 from datetime import datetime, date, timedelta
 from functools import wraps
 from flask import (Flask, render_template, request, redirect, url_for,
@@ -7,6 +7,18 @@ from data import load_user, save_user, delete_user, reset_user, list_users
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "resflecto-secret-dev-key-change-me")
+
+HEARTBEAT_INTERVAL = 30
+heartbeat_lock = threading.Lock()
+
+def heartbeat_worker():
+    while True:
+        time.sleep(HEARTBEAT_INTERVAL)
+        with heartbeat_lock:
+            print(f" Reflecto server alive at {datetime.now().strftime('%H:%M:%S')}")
+
+threading.Thread(target=heartbeat_worker, daemon=True).start()
+
 
 THEMES = {
     "light": "☀️ Light",      "dark": "🌑 Dark",
