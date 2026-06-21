@@ -2,7 +2,7 @@
 <html lang="en" data-theme="{{ theme|default('light') }}">
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Reflecto — Journal · Study · Focus</title>
+<title>Reflecto, Journal · Study · Focus</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
 <style>
 .page-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;position:relative;z-index:1}
@@ -43,17 +43,15 @@
 .btn-submit{font-family:inherit;width:100%;padding:.76rem;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:.9rem;font-weight:600;cursor:pointer;transition:transform .15s,opacity .2s;box-shadow:0 3px 12px var(--accent-glow)}
 .btn-submit:hover{opacity:.91;transform:translateY(-1px)}
 .privacy-note{text-align:center;margin-top:1.1rem;font-size:.69rem;color:var(--muted);opacity:.65}
-@media(max-width:760px){.page-wrap{grid-template-columns:1fr}.left-panel{display:none}.right-panel{padding:1.25rem 1.5rem 2rem}}
+@media(max-width:760px)
 </style>
-  
 </head>
 <body>
 <div class="page-wrap">
   <div class="left-panel">
     <div>
       <div class="brand-logo"><h1>Reflecto<span>.</span></h1></div>
-      <div class="brand-tagline">Journal &middot; Study &middot; Focus</div>
-    </div>
+      <div class="brand-tagline">Journal &middot; Study &middot; Focus</div></div>
     <ul class="feature-list">
       <li class="feature-item"><div class="feat-icon">&#x1F324;</div><div class="feat-text"><h4>Mood Tracking</h4><p>Log daily moods and track your streak.</p></div></li>
       <li class="feature-item"><div class="feat-icon">&#x270D;</div><div class="feat-text"><h4>Private Journal</h4><p>Distraction-free writing with tags.</p></div></li>
@@ -61,56 +59,44 @@
       <li class="feature-item"><div class="feat-icon">&#x2705;</div><div class="feat-text"><h4>Task Manager</h4><p>Priority flags, due dates, overdue detection.</p></div></li>
       <li class="feature-item"><div class="feat-icon">&#x23F1;</div><div class="feat-text"><h4>Timer &amp; Alarm</h4><p>Pomodoro, countdown, stopwatch, alarm.</p></div></li>
     </ul>
-    <div class="left-footer"><span>&#x1F512;</span><span>Private &middot; Local JSON &middot; No tracking</span></div>
-  </div>
+    <div class="left-footer"><span>&#x1F512;</span><span>Private &middot; Local JSON &middot; No tracking</span></div>  </div>
   <div class="right-panel">
     <div class="login-card">
       <div class="card-header">
         <h2>Welcome back</h2>
-        <p>Sign in to your Reflecto space</p>
-      </div>
+        <p>Sign in to your Reflecto space</p></div>
       {% if err == 'noname' %}<div class="error-banner">Please enter a username.</div>
       {% elif err == 'nopass' %}<div class="error-banner">Please enter a password.</div>
       {% elif err == 'wrongpass' %}<div class="error-banner">Incorrect password.</div>
       {% elif ok == 'deleted' %}<div class="ok-banner">User deleted.</div>{% endif %}
       {% if users %}
-      <div class="prev-users-label">Recent users</div>
-      {% for u in users %}
+      <div class="prev-users-label">Recent users</div> {% for u in users %}
       <div class="prev-user-row">
         <button class="prev-user-btn" onclick="document.getElementById('nameInput').value='{{ u.name }}'">
           <div class="prev-user-avatar">{{ u.name[0]|upper }}</div>
           <div><div class="prev-user-name">{{ u.name }}</div>
           <div class="prev-user-date">{% if u.lastLogin %}Last: {{ u.lastLogin[:10] }}{% endif %}</div></div>
-          <span style="margin-left:auto;color:var(--muted)">&#x2192;</span>
-        </button>
+          <span style="margin-left:auto;color:var(--muted)">&#x2192;</span> </button>
         <form method="POST" action="/delete_user" onsubmit="return confirm('Delete {{ u.name }}?')">
           <input type="hidden" name="name" value="{{ u.name }}"/>
           <button class="btn-del-user" type="submit">&#x1F5D1;</button>
-        </form>
-      </div>
-      {% endfor %}
-      <div class="divider">— or enter new name —</div>
-      {% endif %}
+        </form> </div>  {% endfor %}
+      <div class="divider">— or enter new name —</div> {% endif %}
       <form method="POST" action="/login">
         <div class="form-group">
           <label>Username</label>
           <div class="input-wrap">
             <span class="input-icon">&#x1F464;</span>
-            <input id="nameInput" class="form-input" type="text" name="name" placeholder="Your name" autocomplete="username"/>
-          </div>
-        </div>
+            <input id="nameInput" class="form-input" type="text" name="name" placeholder="Your name" autocomplete="username"/> </div> </div>
         <div class="form-group">
           <label>Password</label>
           <div class="input-wrap">
             <span class="input-icon">&#x1F512;</span>
             <input class="form-input" type="password" name="password" placeholder="Your password" autocomplete="current-password"/>
-          </div>
-        </div>
+          </div></div>
         <button class="btn-submit" type="submit">Enter Reflecto &#x1F43E;</button>
       </form>
-      <div class="privacy-note">&#x1F512; Data stored locally. No cloud. No tracking.</div>
-    </div>
-  </div>
+      <div class="privacy-note">&#x1F512; Data stored locally. No cloud. No tracking.</div> </div></div>
 </div>
 </body>
 </html>
